@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Sistema Admisión</title>
+  </head>
+  <body>
+    <h1>Procesar Examen de Admisión</h1>
+
+    <form method="post"
+          action="/procesar"
+          enctype="multipart/form-data">
+
+      <div>
+        <label>
+          Nombre del proceso
+        </label>
+
+        <input type="text"
+               name="nombreProceso"
+               required>
+      </div>
+
+      <br>
+
+      <div>
+        <label>
+          IDENTIFI.DBF
+        </label>
+
+        <input type="file"
+               name="identifi"
+               required>
+      </div>
+
+      <br>
+
+      <div>
+        <label>
+          RESPUEST.DBF
+        </label>
+
+        <input type="file"
+               name="respuest"
+               required>
+      </div>
+
+      <br>
+
+      <div>
+        <label>
+          CLAVES.DBF
+        </label>
+
+        <input type="file"
+               name="claves"
+               required>
+      </div>
+
+      <br>
+
+      <button type="submit">
+        Procesar Archivos
+      </button>
+
+    </form>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Resultado</title>
+    </head>
+    <body>
+        <h1>Resultado</h1>
+
+        <h2 th:if="${mensaje}"
+            th:text="${mensaje}">
+        </h2>
+
+        <h2 th:if="${error}"
+            th:text="${error}">
+        </h2>
+
+        <a href="/">
+            Volver
+        </a>
+    </body>
+</html>
