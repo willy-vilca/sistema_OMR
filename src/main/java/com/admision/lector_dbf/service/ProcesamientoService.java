@@ -35,7 +35,10 @@ public class ProcesamientoService {
             String nombreProceso,
             MultipartFile identifiFile,
             MultipartFile respuestFile,
-            MultipartFile clavesFile
+            MultipartFile clavesFile,
+            Double puntajeCorrecta,
+            Double puntajeIncorrecta,
+            Double puntajeBlanca
     ) throws Exception {
 
         ProcesoAdmision proceso = new ProcesoAdmision();
@@ -134,7 +137,10 @@ public class ProcesamientoService {
                 calificarExamen(
                         examen,
                         respuesta.getRespuestas(),
-                        claveTema
+                        claveTema,
+                        puntajeCorrecta,
+                        puntajeIncorrecta,
+                        puntajeBlanca
                 );
             }
 
@@ -310,13 +316,12 @@ public class ProcesamientoService {
     }
 
     private void calificarExamen(
-
             Examen examen,
-
             Map<String, String> respuestasAlumno,
-
-            Map<String, String> respuestasClave
-
+            Map<String, String> respuestasClave,
+            Double puntajeCorrecta,
+            Double puntajeIncorrecta,
+            Double puntajeBlanca
     ) {
 
         int correctas = 0;
@@ -340,7 +345,7 @@ public class ProcesamientoService {
                     || respuestaCorrecta.isBlank()) {
 
                 correctas++;
-                puntaje += 20;
+                puntaje += puntajeCorrecta;
 
                 continue;
             }
@@ -349,6 +354,7 @@ public class ProcesamientoService {
                     || respuestaAlumno.isBlank()) {
 
                 blancas++;
+                puntaje += puntajeBlanca;
 
                 continue;
             }
@@ -358,12 +364,12 @@ public class ProcesamientoService {
             )) {
 
                 correctas++;
-                puntaje += 20;
+                puntaje += puntajeCorrecta;
 
             } else {
 
                 incorrectas++;
-                puntaje -= 1.125;
+                puntaje += puntajeIncorrecta;
             }
         }
 

@@ -1,67 +1,232 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>Sistema Admisión</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistema de Admisión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
   </head>
   <body>
-    <h1>Procesar Examen de Admisión</h1>
+    <nav class="navbar navbar-dark bg-dark shadow-sm">
+      <div class="container">
+            <span class="navbar-brand mb-0 h1">
+                Sistema de Admisión
+            </span>
+      </div>
+    </nav>
 
-    <form method="post"
-          action="/procesar"
-          enctype="multipart/form-data">
+    <section class="hero-section text-center text-white">
 
-      <div>
-        <label>
-          Nombre del proceso
-        </label>
+      <div class="container py-5">
 
-        <input type="text"
-               name="nombreProceso"
-               required>
+        <h1 class="display-4 fw-bold mb-4">
+          Procesamiento Automático de Exámenes OMR
+        </h1>
+
+        <p class="lead mb-5">
+          Sistema web para procesamiento, calificación y gestión
+          de procesos de admisión universitaria.
+        </p>
+        <div class="card shadow-lg border-0 mx-auto upload-card">
+
+          <div class="card-body p-4">
+
+            <h3 class="mb-4 text-dark">
+              Procesar nuevo examen
+            </h3>
+
+            <form method="post"
+                  action="/procesar"
+                  enctype="multipart/form-data"
+                  id="formProceso">
+
+              <div class="mb-3 text-start">
+                <label class="form-label text-dark">
+                  Nombre del proceso
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       name="nombreProceso"
+                       required>
+              </div>
+              <div class="mb-3 text-start">
+                <label class="form-label text-dark">
+                  IDENTIFI.DBF
+                </label>
+
+                <input type="file"
+                       class="form-control dbf-file"
+                       name="identifi"
+                       required>
+              </div>
+
+              <div class="mb-3 text-start">
+                <label class="form-label text-dark">
+                  RESPUEST.DBF
+                </label>
+
+                <input type="file"
+                       class="form-control dbf-file"
+                       name="respuest"
+                       required>
+              </div>
+              <div class="mb-4 text-start">
+                <label class="form-label text-dark">
+                  CLAVES.DBF
+                </label>
+
+                <input type="file"
+                       class="form-control dbf-file"
+                       name="claves"
+                       required>
+              </div>
+
+              <input type="hidden"
+                     id="puntajeCorrecta"
+                     name="puntajeCorrecta"
+                     value="20">
+
+              <input type="hidden"
+                     id="puntajeIncorrecta"
+                     name="puntajeIncorrecta"
+                     value="-1.125">
+              <input type="hidden"
+                     id="puntajeBlanca"
+                     name="puntajeBlanca"
+                     value="0">
+
+              <div class="d-flex gap-3 justify-content-center">
+
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#configModal">
+                  Ajustes
+                </button>
+
+                <button type="submit"
+                        class="btn btn-primary px-4">
+                  Procesar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container py-5">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+          Procesos registrados
+        </h2>
       </div>
 
-      <br>
+      <div class="row g-4">
 
-      <div>
-        <label>
-          IDENTIFI.DBF
-        </label>
+        <div class="col-md-6 col-lg-4"
+             th:each="proceso : ${procesos}">
 
-        <input type="file"
-               name="identifi"
-               required>
+          <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+              <h5 class="card-title fw-bold"
+                  th:text="${proceso.nombre}">
+              </h5>
+              <p class="text-muted small">
+                Fecha de registro:
+              </p>
+
+              <p th:text="${#temporals.format(proceso.fechaCreacion,
+                        'dd/MM/yyyy HH:mm')}">
+              </p>
+
+              <a class="btn btn-primary w-100"
+                 th:href="@{'/proceso/' + ${proceso.id}}">
+                Ver proceso
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <br>
+    <div class="modal fade"
+         id="configModal"
+         tabindex="-1">
 
-      <div>
-        <label>
-          RESPUEST.DBF
-        </label>
+      <div class="modal-dialog">
 
-        <input type="file"
-               name="respuest"
-               required>
+        <div class="modal-content">
+
+          <div class="modal-header">
+
+            <h5 class="modal-title">
+              Configuración de puntajes
+            </h5>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="mb-3">
+              <label class="form-label">
+                Respuesta correcta
+              </label>
+
+              <input type="number"
+                     step="0.001"
+                     class="form-control"
+                     id="inputCorrecta"
+                     value="20">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">
+                Respuesta incorrecta
+              </label>
+
+              <input type="number"
+                     step="0.001"
+                     class="form-control"
+                     id="inputIncorrecta"
+                     value="-1.125">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">
+                Respuesta en blanco
+              </label>
+
+              <input type="number"
+                     step="0.001"
+                     class="form-control"
+                     id="inputBlanca"
+                     value="0">
+            </div>
+          </div>
+
+          <div class="modal-footer">
+
+            <button type="button"
+                    class="btn btn-primary"
+                    id="guardarConfig">
+              Guardar configuración
+            </button>
+          </div>
+        </div>
       </div>
-
-      <br>
-
-      <div>
-        <label>
-          CLAVES.DBF
-        </label>
-
-        <input type="file"
-               name="claves"
-               required>
-      </div>
-
-      <br>
-
-      <button type="submit">
-        Procesar Archivos
-      </button>
-
-    </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
   </body>
 </html>
