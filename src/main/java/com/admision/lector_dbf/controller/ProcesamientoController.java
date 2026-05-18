@@ -1,8 +1,10 @@
 package com.admision.lector_dbf.controller;
 
+import com.admision.lector_dbf.entity.Carrera;
 import com.admision.lector_dbf.entity.Examen;
 import com.admision.lector_dbf.entity.ProcesoAdmision;
 import com.admision.lector_dbf.repository.ExamenRepository;
+import com.admision.lector_dbf.repository.CarreraRepository;
 import com.admision.lector_dbf.repository.ProcesoAdmisionRepository;
 import com.admision.lector_dbf.service.ProcesamientoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class ProcesamientoController {
 
     @Autowired
     private ExamenRepository examenRepository;
+
+    @Autowired
+    private CarreraRepository carreraRepository;
 
     @GetMapping("/")
     public String inicio(Model model) {
@@ -103,6 +108,14 @@ public class ProcesamientoController {
         model.addAttribute(
                 "examenes",
                 examenes
+        );
+
+        List<Carrera> carreras =
+                carreraRepository.findAll();
+
+        model.addAttribute(
+                "carreras",
+                carreras
         );
         return "proceso-detalle";
     }

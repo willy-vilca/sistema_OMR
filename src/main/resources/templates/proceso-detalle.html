@@ -49,6 +49,21 @@
                             Menor a mayor
                         </option>
                     </select>
+
+                    <select class="form-select shadow-sm"
+                            id="filtroCarrera"
+                            style="max-width: 350px;">
+
+                        <option value="">
+                            Todas las carreras
+                        </option>
+
+                        <option th:each="carrera : ${carreras}"
+                                th:value="${carrera.nombre}"
+                                th:text="${carrera.nombre}">
+                        </option>
+
+                    </select>
                 </div>
             </div>
 
